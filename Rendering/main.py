@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(1, '/Users/raulescobar/Documents/chess_engine')
+sys.path.insert(1, '/Users/raulescobar/Documents/chessEngine')
 
 import pygame as p
 from Engine.ChessEngine import GameState
