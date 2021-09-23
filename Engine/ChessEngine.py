@@ -19,7 +19,14 @@ class GameState():
         
         self.whiteToMove = True
         self.moveLog = []
-        self.moveFunctions = {'p':self.getPawnMoves, 'R':self.getRookMoves, 'N':self.getKnightMoves, 'B':self.getBishopMoves, 'Q':self.getQueenMoves, 'K':self.getKingMoves}
+        self.moveFunctions =    {'p':self.getPawnMoves, 'R':self.getRookMoves, 
+                                'N':self.getKnightMoves, 'B':self.getBishopMoves, 
+                                'Q':self.getQueenMoves, 'K':self.getKingMoves}
+        self.whiteKingloc = (7, 4)
+        self.blackKingloc = (0, 4)
+        self.inCheck = False
+        self.pins = []
+        self.checks = []
 
 
 
@@ -28,6 +35,10 @@ class GameState():
         self.board[move.e_row][move.e_col] = move.piece
         self.moveLog.append(move)
         self.whiteToMove = not self.whiteToMove
+        if move.piece == 'wK':
+            self.whiteKingloc = (move.e_row,move.e_col)
+        elif move.piece == 'bK':
+            self.blackKingloc = (move.e_row,move.e_col)
 
     def undoMove(self):
         if len(self.moveLog) > 0:
@@ -35,10 +46,45 @@ class GameState():
             self.board[move.s_row][move.s_col] = move.piece
             self.board[move.e_row][move.e_col] = move.captured
             self.whiteToMove = not self.whiteToMove
+            if move.piece == 'wK':
+                self.whiteKingloc = (move.s_row,move.s_col)
+            elif move.piece == 'bK':
+                self.blackKingloc = (move.s_row,move.s_col)
 
     def getValidMoves(self):
-        return self.getAllPossibleMoves()
+        moves = self.getAllPossibleMoves()
 
+        for i in range(len(moves)-1,-1,-1):
+            self.makeMove(moves[i])
+            self.whiteToMove = not self.whiteToMove
+            if self.inCheck():
+                moves.remove(moves[i])
+            self.whiteToMove = not self.whiteToMove
+            self.undoMove()
+        if len(moves) == 0:
+            if self.inCheck():
+                self.checkMate = True
+            else:
+                self.staleMate = True
+        else:
+            self.checkMate = False
+            self.staleMate = False
+        return moves
+
+    def inCheck(self):
+        if self.whiteToMove:
+            return self.squreUnderAttack(self.whiteKingloc[0],self.whiteKingloc[1])
+        else:
+            return self.squreUnderAttack(self.blackKingloc[0],self.blackKingloc[1])
+
+    def squreUnderAttack(self,r,c):
+        self.whiteToMove = not self.whiteToMove
+        oppMoves = self.getAllPossibleMoves()
+        self.whiteToMove = not self.whiteToMove
+        for move in oppMoves:
+            if move.e_row == r and move.e_col == c:
+                return True
+        return False
 
     def getAllPossibleMoves(self):
         moves = []
@@ -48,7 +94,6 @@ class GameState():
                 if (turn == 'w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
                     piece = self.board[r][c][1]
                     self.moveFunctions[piece](r,c,moves)
-    
         return moves
 
 
@@ -123,16 +168,12 @@ class GameState():
         self.getRookMoves(r,c,moves)
 
     def getKingMoves(self,r,c,moves): #no castling support
-        if self.whiteToMove:
-            for i in range(-1,2):
-                for j in range(-1,2):
-                    if r+i >= 0 and r+i <= 7 and c+j >= 0 and c+j <= 7 and ( self.board[r+i][c+j] == '--' or self.board[r+i][c+j][0] != 'w'):
-                        moves.append(Move((r,c), (r+i,c+j), self.board))
-        else:
-            for i in range(-1,2):
-                for j in range(-1,2):
-                    if r+i >= 0 and r+i <= 7 and c+j >= 0 and c+j <= 7 and (self.board[r+i][c+j] == '--' or  self.board[r+i][c+j][0] != 'b'):
-                        moves.append(Move((r,c), (r+i,c+j), self.board))
+        friendlyColor = 'w' if self.whiteToMove else 'b'
+        for i in range(-1,2):
+            for j in range(-1,2):
+                if r+i >= 0 and r+i <= 7 and c+j >= 0 and c+j <= 7 and (self.board[r+i][c+j][0] != friendlyColor):
+                    moves.append(Move((r,c), (r+i,c+j), self.board))
+        
 
 
 

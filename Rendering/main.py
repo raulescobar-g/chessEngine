@@ -59,8 +59,11 @@ def main():
                     if move in validMoves:
                         gs.makeMove(move)
                         moveMade = True
-                    curr_square = ()
-                    clicks = []
+                        curr_square = ()
+                        clicks = []
+                    else:
+                        clicks = [curr_square]
+
 
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_BACKSPACE:
