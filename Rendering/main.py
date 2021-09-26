@@ -56,12 +56,13 @@ def main():
                 if len(clicks) == 2:
                     move = Move(clicks[0], clicks[1], gs.board)
                     print(move.getChessNotation())
-                    if move in validMoves:
-                        gs.makeMove(move)
-                        moveMade = True
-                        curr_square = ()
-                        clicks = []
-                    else:
+                    for i in range(len(validMoves)):
+                        if move == validMoves[i]:
+                            gs.makeMove(validMoves[i])
+                            moveMade = True
+                            curr_square = ()
+                            clicks = []
+                    if not moveMade:
                         clicks = [curr_square]
 
 
