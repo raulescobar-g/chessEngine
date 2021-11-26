@@ -1,4 +1,4 @@
-# Chess Enging
+# Chess Engine
 ## written in python with pygame for the gui
 
 Example images: 
@@ -13,11 +13,11 @@ If you don't have pipenv go into the project directory:
 pip install --user pipenv
 ```
 Then:
- ```
+
+```
 pipenv install
 pipenv run python3 -m main
 ```
-
 
 ### features I would like to add
 - [ ] Deploy online with Flask or FastAPI
