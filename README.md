@@ -1,12 +1,23 @@
-* small side project 
+# Chess Enging
+## written in python with pygame for the gui
 
-* TODO
 
-    -add timers for players
-    -display moves in chess notation (GUI)
-    -score the positions so that you can know who is winning (heavy theory)
-    -add stalemate
-    -add win conditions
-    -add the 3-move-draw rule
-    -create an ai to play against (hard probably wont happend)
-    -websockets to play against other people (also on the tougher side)
+![Chessboard example image](https://github.com/raulescobar-g/chessEngine/blob/main/piece_images/start.png?raw=true)
+
+To run this project locally download this reopoi and run the following commands:
+
+If you don't have pipenv go into the project directory:
+'''
+pip install --user pipenv
+'''
+Then:
+'''
+pipenv install
+pipenv run python3 -m main
+'''
+
+
+### features I would like to add
+- [ ] Deploy online with Flask or FastAPI
+- [ ] Add multiplayer with websockets
+- [ ] AI to play against

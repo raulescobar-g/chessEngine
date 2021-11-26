@@ -172,8 +172,4 @@ def drawText(screen, text):
     screen.blit(textObject, textLocation)
 
     
-
-
-if __name__ == "__main__":
-    main()
-    
+  
