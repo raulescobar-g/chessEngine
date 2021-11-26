@@ -3,8 +3,9 @@
 
 
 ![Chessboard example image](https://github.com/raulescobar-g/chessEngine/blob/main/piece_images/start.png?raw=true)
-
-To run this project locally download this reopoi and run the following commands:
+![Chessboard example image](https://github.com/raulescobar-g/chessEngine/blob/main/piece_images/state.png?raw=true)
+![Chessboard example image](https://github.com/raulescobar-g/chessEngine/blob/main/piece_images/end.png?raw=true)
+To run this project locally download this repo and run the following commands:
 
 If you don't have pipenv go into the project directory:
 '''
