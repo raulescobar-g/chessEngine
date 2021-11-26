@@ -3,10 +3,6 @@ import numpy as np
 from .chessMoves import Move
 from .castleRights import CastleRights
 
-'''
-Stores state of game and determines valid moves
-'''
-
 class GameState():
 
     def __init__(self):
@@ -29,12 +25,11 @@ class GameState():
         self.inCheck = False
         self.pins = []
         self.checks = []
-        self.checkMate = False
-        self.staleMate = False
+        self.checkmate = False
+        self.stalemate = False
         self.enpassantPossible = ()
         self.currentCastleRights = CastleRights(True,True,True,True)
         self.castleRightsLog = [CastleRights(self.currentCastleRights.wks,self.currentCastleRights.bks,self.currentCastleRights.wqs,self.currentCastleRights.bqs)]
-
 
 
     def makeMove(self,move):
@@ -69,10 +64,6 @@ class GameState():
             else:
                 self.board[move.e_row][move.e_col+1] = self.board[move.e_row][move.e_col-2]
                 self.board[move.e_row][move.e_col-2] = '--'
-
-
-        
-
 
     def undoMove(self):
         if len(self.moveLog) > 0:
@@ -165,6 +156,11 @@ class GameState():
             
         else:
             moves = self.getAllPossibleMoves()
+
+        if len(moves) == 0 and self.inCheck:
+            self.checkmate = True
+        elif len(moves) == 0:
+            self.stalemate = True
 
         return moves
 
@@ -300,7 +296,7 @@ class GameState():
                 if (r+moveAmount,c+1) == self.enpassantPossible:
                     moves.append(Move((r,c), (r+moveAmount,c+1), self.board, isEnpassantMove=True))
         
-    def getRookMoves(self,r,c,moves): #no castling
+    def getRookMoves(self,r,c,moves): 
         piecePinned = False
         pinDirection = ()
         for i in range(len(self.pins) - 1, -1, -1):
@@ -381,7 +377,7 @@ class GameState():
         self.getBishopMoves(r,c,moves)
         self.getRookMoves(r,c,moves)
 
-    def getKingMoves(self,r,c,moves): #no castling support
+    def getKingMoves(self,r,c,moves): 
         friendlyColor = 'w' if self.whiteToMove else 'b'
         for i in range(-1,2):
             for j in range(-1,2):
@@ -402,10 +398,7 @@ class GameState():
                     else:
                         self.blackKingloc = (r,c)
         self.getCastleMoves(r,c,moves,friendlyColor)
-
-        
-
-    
+ 
     def getCastleMoves(self,r,c,moves,allyColor):
         if (self.whiteToMove and self.currentCastleRights.wks) or (not self.whiteToMove and self.currentCastleRights.bks):
             self.getKingsideCastleMoves(r,c,moves,allyColor)

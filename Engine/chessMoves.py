@@ -1,5 +1,3 @@
-import numpy as np
-
 class Move():
 
     ranksToRows = {'1':7,'2':6,'3':5,'4':4,'5':3,'6':2,'7':1,'8':0}
@@ -26,7 +24,6 @@ class Move():
         
         self.moveID = str(self.s_row) + str(self.s_col) + str(self.e_row) + str(self.e_col)
         
-
 
     def __eq__(self,other):
         return isinstance(other,Move) and self.moveID == other.moveID
