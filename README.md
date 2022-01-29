@@ -23,3 +23,5 @@ pipenv run python3 -m main
 - [ ] Deploy online with Flask or FastAPI
 - [ ] Add multiplayer with websockets
 - [ ] AI to play against
+
+Project was completed following a tutorial on youtube :)
